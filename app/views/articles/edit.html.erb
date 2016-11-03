@@ -1,0 +1,13 @@
+<%= form_for @article, url: article_path(@article), html: {class: 'form-group'}, method: :patch do |f| %>
+   <table>
+    <tr>
+      <td><%= f.label :title %></td>
+      <td><%= f.text_field :title %></td>
+    </tr>
+    <tr>
+        <td><%= f.label :text %></td>
+        <td><%= f.text_area :text %></td>
+    </tr>
+    <tr><td><%= f.submit %> </td></tr>
+  </table>
+<% end %>
