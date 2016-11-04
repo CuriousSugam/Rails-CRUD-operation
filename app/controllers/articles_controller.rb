@@ -1,5 +1,7 @@
 class ArticlesController < ApplicationController
 
+  before_action :set_article, only: [:edit, :update, :show]
+
   # this is executed when url patter is /articles/new
   def new
   end
@@ -14,40 +16,50 @@ class ArticlesController < ApplicationController
     # render plain: params[:article].inspect
     @article = Article.new(article_params)
 
-    @article.save
-    redirect_to @article
+    if @article.save
+      flash[:notice] = "Article created successfully."
+      redirect_to @article
+    else
+      flash[:notice] = "Error creating Article."
+    end
   end
 
   # this is executed when url pattern is /articles/{id}/edit
   def edit
-    @article = Article.find(params[:id])
   end
 
   # this is executed when url pattern is /articles/{id} & method: PUT or PATCH
   def update
-    @article = Article.find(params[:id])
     if @article.update(article_params)
+      flash[:notice] = "Article updated successfully."
       redirect_to @article
     else
+      flash[:notice] = "Error updating Article."
       render 'edit'
     end
   end
 
   # this is executed when url pattern is /articles/{id} & method: GET
   def show
-    @article = Article.find(params[:id])
   end
 
   # this is executed when url pattern is /articles/{id} & method: DELETE
   def destroy
-    @article = Article.find(params[:id])
-    @article.destroy
+    if @article.destroy
+      flash[:notice] = "Article #{@article.title} destroyed successfully."
+    end
     redirect_to articles_path
   end
 
   private
   def article_params
     params.require(:article).permit(:title, :text)
+  end
+
+  private
+  def set_article
+    # 
+    @article = Article.find(params[:id])
   end
 
 end
